@@ -19,14 +19,14 @@ public class RunApplication {
     /**
      * @param parser - parser.
      */
-    private Parser parser;
+    private ParserYelp parser;
 
     /**
      * RunApplication - constructor.
      * @param parser - parser.
      */
     @Autowired
-    public RunApplication(Parser parser) {
+    public RunApplication(ParserYelp parser) {
         this.parser = parser;
     }
 
@@ -39,7 +39,7 @@ public class RunApplication {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void testJpaMethods() throws IOException {
+    public void testJpaMethods() throws IOException, InterruptedException {
         this.parser.parserCopart();
     }
 

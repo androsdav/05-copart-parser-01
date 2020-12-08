@@ -23,11 +23,7 @@ public class ParserYelp {
 
     private String userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:82.0) Gecko/20100101 Firefox/82.0";
 
-    /**
-     * getCookies - get cookies.
-     * @param url - url.
-     * @return - returns cookies.
-     */
+    /*
     public Map<String, String> getCookies(String url) {
         Connection.Response response = null;
         try {
@@ -41,7 +37,8 @@ public class ParserYelp {
             e.printStackTrace();
         }
         return response != null ? response.cookies() : null;
-    }
+    }*/
+
 
     /*
     Connection.Response response = Jsoup.connect(URL4)
@@ -60,7 +57,7 @@ public class ParserYelp {
     /**
      * @throws IOException - exeption.
      */
-    public void parserCopart() throws IOException {
+    public void parserCopart() throws IOException, InterruptedException {
         /**
          * @param URL - url copart.
          */
@@ -70,6 +67,46 @@ public class ParserYelp {
         //String URL4 = "https://www.avito.ru/rossiya/avtomobili/sedan/avtomat-ASgCAQICAkDmtg0Uyrco8LYNFO63KA";
         String URL4 = "https://www.yelp.com";
         String URL5 = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY";
+
+        System.out.println();
+        Connection.Response response = Jsoup.connect(URL1)
+                .header("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                .header("accept-encoding", "gzip, deflate, sdch, br")
+                .header("accept-language", "en-US,en;q=0.8")
+                .header("cache-control", "max-age=0")
+                .header("user-agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:82.0) Gecko/20100101 Firefox/82.0")
+                .header("upgrade-insecure-requests", "1")
+                .ignoreHttpErrors(true)
+                .followRedirects(true)
+                .method(Connection.Method.GET)
+                .timeout(30000)
+                .execute();
+        //Thread.sleep(5000);
+        Document document = response.parse();
+        System.out.println(document);
+        Map<String, String> map = response.cookies();
+        System.out.println("Cookies");
+        for (Map.Entry<String, String> item : map.entrySet()) {
+            System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
+
+        /*
+        System.out.println();
+        Connection.Response response1 = Jsoup.connect(URL1)
+                //.header("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*//*;q=0.8")
+                .header("accept-encoding", "gzip, deflate, sdch, br")
+                .header("accept-language", "en-US,en;q=0.8")
+                .header("cache-control", "max-age=0")
+                .header("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36")
+                .header("upgrade-insecure-requests", "1")
+                .ignoreHttpErrors(true)
+                .followRedirects(true)
+                .cookies(response.cookies())
+                .method(Connection.Method.GET)
+                .timeout(30000)
+                .execute();
+        Document document1 = response1.parse();
+        System.out.println(document1);
+        */
 
         /*
         Connection.Response response = Jsoup
@@ -102,11 +139,7 @@ public class ParserYelp {
                 .get();
         System.out.println(document);
         */
-
-        /**
-         * Connect to url and get cookies
-         */
-        /*
+/*
         Connection.Response response = Jsoup.connect(URL4)
                 .userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:82.0) Gecko/20100101 Firefox/82.0")
                 .method(Connection.Method.GET)
@@ -118,7 +151,7 @@ public class ParserYelp {
         System.out.println("Cookies");
         for (Map.Entry<String, String> item : map.entrySet()) {
             System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
-*/
+*//*
             Document document = Jsoup.connect(URL5)
                     .userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:82.0) Gecko/20100101 Firefox/82.0")
 //                    .cookies(map)
@@ -187,4 +220,4 @@ public class ParserYelp {
 
         }
     }
-
+}
