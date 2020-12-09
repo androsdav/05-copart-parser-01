@@ -68,9 +68,10 @@ public class ParserYelp {
         String URL4 = "https://www.yelp.com";
         String URL5 = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY";
 
+
         System.out.println();
-        Connection.Response response = Jsoup.connect(URL1)
-                .header("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+        Connection.Response response = Jsoup.connect(URL5)
+                .header("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*//*;q=0.8")
                 .header("accept-encoding", "gzip, deflate, sdch, br")
                 .header("accept-language", "en-US,en;q=0.8")
                 .header("cache-control", "max-age=0")
@@ -88,7 +89,6 @@ public class ParserYelp {
         System.out.println("Cookies");
         for (Map.Entry<String, String> item : map.entrySet()) {
             System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
-
         /*
         System.out.println();
         Connection.Response response1 = Jsoup.connect(URL1)
