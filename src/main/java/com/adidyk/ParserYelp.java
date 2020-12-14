@@ -89,7 +89,6 @@ public class ParserYelp {
         System.out.println("Cookies");
         for (Map.Entry<String, String> item : map.entrySet()) {
             System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
-        /*
         System.out.println();
         Connection.Response response1 = Jsoup.connect(URL1)
                 //.header("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*//*;q=0.8")
@@ -106,7 +105,6 @@ public class ParserYelp {
                 .execute();
         Document document1 = response1.parse();
         System.out.println(document1);
-        */
 
         /*
         Connection.Response response = Jsoup
