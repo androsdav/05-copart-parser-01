@@ -1,5 +1,6 @@
 package com.adidyk;
 
+import lombok.SneakyThrows;
 import org.aspectj.apache.bcel.generic.FieldOrMethod;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -21,23 +23,70 @@ import java.util.Map;
 @Component
 public class ParserYelp {
 
+    /**
+     *
+     */
     private String userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:82.0) Gecko/20100101 Firefox/82.0";
 
-    /*
+    /**
+     *
+     * @param url - url.
+     * @return - map.
+     */
     public Map<String, String> getCookies(String url) {
         Connection.Response response = null;
         try {
             response = Jsoup.connect(url)
-                    .userAgent(this.userAgent)
+                    .userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0")
+                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                    .header("Accept-Language", "en-US,en;q=0.5")
+                    .header("Accept-Encoding", "gzip, deflate, br")
+                    .header("Connection", "keep-alive")
+                    .header("upgrade-insecure-requests", "1")
                     .method(Connection.Method.GET)
                     .referrer("http://www.google.com")
+                    .ignoreHttpErrors(true)
+                    .followRedirects(true)
                     .timeout(5000)
                     .execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return response != null ? response.cookies() : null;
-    }*/
+    }
+
+    /**
+     *
+     * @param cookies - cppkies.
+     * @param url - url.
+     * @return - document.
+     */
+    @SneakyThrows
+    public Document getDocument(Map<String, String> cookies, String url) {
+        Connection.Response response = null;
+        try {
+            response = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0")
+                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                    .header("Accept-Language", "en-US,en;q=0.5")
+                    .header("Accept-Encoding", "gzip, deflate, br")
+                    .header("Connection", "keep-alive")
+                    .header("upgrade-insecure-requests", "1")
+                    .method(Connection.Method.GET)
+                    .cookies(cookies)
+                    .referrer("http://www.google.com")
+                    .ignoreHttpErrors(true)
+                    .followRedirects(true)
+                    .timeout(5000)
+                    .execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response != null ? (response).parse() : null;
+    }
+
+
+}
 
 
     /*
@@ -57,10 +106,12 @@ public class ParserYelp {
     /**
      * @throws IOException - exeption.
      */
+    /*
     public void parserCopart() throws IOException, InterruptedException {
         /**
          * @param URL - url copart.
          */
+    /*
         String URL1 = "https://www.copart.com/vehicleFinderSearch/?displayStr=%5B2010%20TO%202021%5D&from=%2FvehicleFinder%2F&searchStr=%7B%22MISC%22:%5B%22%23VehicleTypeCode:VEHTYPE_V%22,%22%23LotYear:%5B2010%20TO%202021%5D%22%5D,%22sortByZip%22:false,%22buyerEnteredZip%22:null,%22milesAway%22:null%7D&searchCriteria=%7B%22query%22:%5B%22*%22%5D,%22filter%22:%7B%22FETI%22:%5B%22buy_it_now_code:B1%22%5D,%22MISC%22:%5B%22%23VehicleTypeCode:VEHTYPE_V%22,%22%23LotYear:%5B2010%20TO%202021%5D%22%5D%7D,%22sort%22:%5B%22auction_date_type%20desc%22,%22auction_date_utc%20asc%22%5D,%22watchListOnly%22:false,%22searchName%22:%22%22,%22freeFormSearch%22:false%7D";
         String URL2 = "https://www.pravda.com.ua";
         String URL3 = "https://www.copart.de";
@@ -216,6 +267,6 @@ public class ParserYelp {
         */
 
 
-        }
-    }
-}
+       // }
+    //}
+//}
