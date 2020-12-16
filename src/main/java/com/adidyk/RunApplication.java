@@ -54,6 +54,7 @@ public class RunApplication {
         System.out.println();
         System.out.println(document.body());
         System.out.println();
+        System.out.println(document.title());
 
     }
 }
