@@ -47,7 +47,7 @@ public class ParserYelp {
                     .referrer("http://www.google.com")
                     .ignoreHttpErrors(true)
                     .followRedirects(true)
-                    .timeout(5000)
+                    //.timeout(5000)
                     .execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,6 +63,7 @@ public class ParserYelp {
      */
     @SneakyThrows
     public Document getDocument(Map<String, String> cookies, String url) {
+        System.out.println("Second connect start");
         Connection.Response response = null;
         try {
             response = Jsoup.connect(url)
@@ -82,6 +83,7 @@ public class ParserYelp {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Second connect finish");
         return response != null ? (response).parse() : null;
     }
 

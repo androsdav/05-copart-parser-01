@@ -1,6 +1,8 @@
 package com.adidyk;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -49,12 +51,19 @@ public class RunApplication {
         for (Map.Entry<String, String> item : cookies.entrySet()) {
             System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
         }
-
         Document document = this.parser.getDocument(cookies, "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY");
-        System.out.println();
-        System.out.println(document.body());
-        System.out.println();
-        System.out.println(document.title());
+        //Elements elements = document.select("div.border-color--default_leftRailSearchResultsContainer__09f24__3vlwA > div:nth-child(2)");
+        System.out.println("TEst start");
+        Element element = document.select("div.leftRailSearchResultsContainer__09f24__3vlwA > div:nth-child(2) > ul:nth-child(1) > li:nth-child(1) > div:nth-child(1) > h3:nth-child(1)").first();
+        System.out.println("TEst finish");
+
+        /*
+        for (Element element : elements) {
+            System.out.println(element);
+        }*/
+        System.out.println(element.text());
+        //System.out.println();
+        //System.out.println();
 
     }
 }
