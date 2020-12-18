@@ -6,6 +6,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,11 +23,6 @@ import java.util.Objects;
  */
 @Component
 public class ParserYelp {
-
-    /**
-     *
-     */
-    private String userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:82.0) Gecko/20100101 Firefox/82.0";
 
     /**
      *
@@ -47,7 +43,6 @@ public class ParserYelp {
                     .referrer("http://www.google.com")
                     .ignoreHttpErrors(true)
                     .followRedirects(true)
-                    //.timeout(5000)
                     .execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,7 +73,6 @@ public class ParserYelp {
                     .referrer("http://www.google.com")
                     .ignoreHttpErrors(true)
                     .followRedirects(true)
-                    .timeout(5000)
                     .execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,6 +81,37 @@ public class ParserYelp {
         return response != null ? (response).parse() : null;
     }
 
+
+    /**
+     *
+     * @param document - document.
+     */
+    public void parser(Document document) {
+        Elements elements = document.select("div.leftRailSearchResultsContainer__09f24__3vlwA > div:nth-child(1) > ul:nth-child(1)");
+        System.out.println();
+        //System.out.println(elements.text());
+        System.out.println();
+        Elements elements1 = elements.select("div.container__09f24__21w3G");
+        for (Element element : elements1) {
+            String link = element.select("a.link-size--inherit__09f24__2Uj95").text();
+            if (!link.equals("more")) {
+                System.out.println(link);
+            }
+        }
+        System.out.println();
+        //System.out.println(elements1.text());
+        System.out.println();
+
+
+        /*
+        for (Element element : elements) {
+            if (element.select("div.container__09f24__21w3G") != null) {
+                System.out.println(element.text());
+            }
+
+        }*/
+
+    }
 
 }
 
