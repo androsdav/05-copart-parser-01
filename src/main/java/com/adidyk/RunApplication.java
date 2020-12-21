@@ -46,7 +46,7 @@ public class RunApplication {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void testJpaMethods() {
+    public void testJpaMethods() throws IOException {
         //Document document = this.parser.getDocument1("https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY");
         //System.out.println(document.body());
         Map<String, String> cookies = this.parser.getCookies("https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY");
@@ -63,10 +63,5 @@ public class RunApplication {
         for (Element element : elements) {
             System.out.println(element);
         }*/
-        //System.out.println(element.text());
-        //System.out.println();
-        //System.out.println();
-        //System.out.println(document);
-
     }
 }

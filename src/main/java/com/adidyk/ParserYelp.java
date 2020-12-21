@@ -57,7 +57,7 @@ public class ParserYelp {
      * @return - document.
      */
     @SneakyThrows
-    public Document getDocument(Map<String, String> cookies, String url) {
+    public Document getDocument(Map<String, String> cookies, String url) throws IOException {
         System.out.println("Second connect start");
         Connection.Response response = null;
         try {
