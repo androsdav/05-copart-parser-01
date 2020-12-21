@@ -81,7 +81,6 @@ public class ParserYelp {
         return response != null ? (response).parse() : null;
     }
 
-
     /**
      *
      * @param document - document.
@@ -93,27 +92,13 @@ public class ParserYelp {
         System.out.println();
         Elements elements1 = elements.select("div.container__09f24__21w3G");
         for (Element element : elements1) {
-            String link = element.select("a.link-size--inherit__09f24__2Uj95").text();
-            if (!link.equals("more")) {
+            String link = element.select("a.link-size--inherit__09f24__2Uj95").first().text();
                 System.out.println(link);
-            }
         }
-        System.out.println();
-        //System.out.println(elements1.text());
-        System.out.println();
-
-
-        /*
-        for (Element element : elements) {
-            if (element.select("div.container__09f24__21w3G") != null) {
-                System.out.println(element.text());
-            }
-
-        }*/
-
     }
 
 }
+
 
 
     /*
