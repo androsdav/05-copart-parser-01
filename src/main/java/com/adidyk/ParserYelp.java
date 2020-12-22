@@ -101,23 +101,7 @@ public class ParserYelp {
 
 
 
-    /*
-    Connection.Response response = Jsoup.connect(URL4)
-            .userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:82.0) Gecko/20100101 Firefox/82.0")
-            .method(Connection.Method.GET)
-            .referrer("http://www.google.com")
-            .timeout(5000)
-            .execute();
 
-    Map<String, String> map = response.cookies();
-        System.out.println("Cookies");
-        for (Map.Entry<String, String> item : map.entrySet()) {
-        System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
-
-
-    /**
-     * @throws IOException - exeption.
-     */
     /*
     public void parserCopart() throws IOException, InterruptedException {
         /**
