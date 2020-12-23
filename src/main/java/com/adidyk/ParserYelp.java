@@ -92,8 +92,11 @@ public class ParserYelp {
         System.out.println();
         Elements elements1 = elements.select("div.container__09f24__21w3G");
         for (Element element : elements1) {
-            String link = element.select("a.link-size--inherit__09f24__2Uj95").first().text();
-                System.out.println(link);
+            String name = element.select("a.link-size--inherit__09f24__2Uj95").first().text();
+            String phone = element.select("p.text-align--right__09f24__1TIxB").first().text();
+            String street = element.select("p.text-align--right__09f24__1TIxB").get(1).text();
+                //System.out.println("name: " + name + "; phone: " + phone);
+            System.out.println("street: " + street);
         }
     }
 
