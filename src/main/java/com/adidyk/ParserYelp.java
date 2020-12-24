@@ -95,8 +95,9 @@ public class ParserYelp {
             String name = element.select("a.link-size--inherit__09f24__2Uj95").first().text();
             String phone = element.select("p.text-align--right__09f24__1TIxB").first().text();
             String street = element.select("p.text-align--right__09f24__1TIxB").get(1).text();
+            String street1 = element.select("p.text-align--right__09f24__1TIxB").get(2).text();
                 //System.out.println("name: " + name + "; phone: " + phone);
-            System.out.println("street: " + street);
+            System.out.println("street: " + street1);
         }
     }
 
