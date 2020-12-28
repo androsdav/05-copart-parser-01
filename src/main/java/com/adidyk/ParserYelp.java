@@ -10,9 +10,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -23,6 +21,10 @@ import java.util.Objects;
  */
 @Component
 public class ParserYelp {
+
+    private List<Item> itemsList = new ArrayList<>();
+
+
 
     /**
      *
@@ -86,26 +88,31 @@ public class ParserYelp {
      * @param document - document.
      */
     public void parser(Document document) {
-        Elements elements = document.select("div.leftRailSearchResultsContainer__09f24__3vlwA > div:nth-child(1) > ul:nth-child(1)");
-        System.out.println();
-        //System.out.println(elements.text());
-        System.out.println();
-        Elements elements1 = elements.select("div.container__09f24__21w3G");
-        for (Element element : elements1) {
-            String name = element.select("a.link-size--inherit__09f24__2Uj95").first().text();
-            String phone = element.select("p.text-align--right__09f24__1TIxB").first().text();
-            String street = element.select("p.text-align--right__09f24__1TIxB").get(1).text();
-            String street1 = element.select("p.text-align--right__09f24__1TIxB").get(2).text();
-                //System.out.println("name: " + name + "; phone: " + phone);
-            System.out.println("street: " + street1);
+        Elements elements = document.select("div.leftRailSearchResultsContainer__09f24__3vlwA > div:nth-child(1) > ul:nth-child(1)").select("div.container__09f24__21w3G");
+        for (Element element : elements) {
+            Item item = new Item();
+            item.setName(element.select("a.link-size--inherit__09f24__2Uj95").first().text());
+            item.setPhone(element.select("p.text-align--right__09f24__1TIxB").first().text());
+            item.setStreet(element.select("p.text-align--right__09f24__1TIxB").get(1).text());
+            item.setNeighborhoods(element.select("p.text-align--right__09f24__1TIxB").get(2).text());
+            this.itemsList.add(item);
         }
+        Set<Item> itemSet = new HashSet<>(this.itemsList);
+        this.getItems(itemSet);
+    }
+
+    /**
+     *
+     */
+    public void getItems(Set items) {
+       // System.out.println(this.items);
+        items.forEach(System.out::println);
     }
 
 }
 
 
-
-
+        //div.leftRailSearchResultsContainer__09f24__3vlwA > div:nth-child(1) > ul:nth-child(1) > li:nth-child(4) > div.container__09f24__21w3G
     /*
     public void parserCopart() throws IOException, InterruptedException {
         /**
