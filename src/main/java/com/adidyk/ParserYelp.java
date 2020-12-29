@@ -90,15 +90,28 @@ public class ParserYelp {
     public void parser(Document document) {
         Elements elements = document.select("div.leftRailSearchResultsContainer__09f24__3vlwA > div:nth-child(1) > ul:nth-child(1)").select("div.container__09f24__21w3G");
         for (Element element : elements) {
-            Item item = new Item();
+            String name = element.select("a.link-size--inherit__09f24__2Uj95").first().text();
+            if (element.select("p.text-align--right__09f24__1TIxB").first().text() != null) {
+
+            }
+            ebaa178c88c7981d7fbc69b5794f54987f5dc2fb4ad3f932c154ab7bab687c55
+            }
+            //Item item = new Item();
+            /*
             item.setName(element.select("a.link-size--inherit__09f24__2Uj95").first().text());
-            item.setPhone(element.select("p.text-align--right__09f24__1TIxB").first().text());
-            item.setStreet(element.select("p.text-align--right__09f24__1TIxB").get(1).text());
-            item.setNeighborhoods(element.select("p.text-align--right__09f24__1TIxB").get(2).text());
-            this.itemsList.add(item);
+            if (element.select("p.text-align--right__09f24__1TIxB").first().text().charAt(0) == '(') {
+                item.setPhone(element.select("p.text-align--right__09f24__1TIxB").first().text());
+                item.setStreet(element.select("p.text-align--right__09f24__1TIxB").get(1).text());
+                item.setNeighborhoods(element.select("p.text-align--right__09f24__1TIxB").get(2).text());
+            } else {
+                item.setStreet(element.select("p.text-align--right__09f24__1TIxB").get(0).text());
+                item.setNeighborhoods(element.select("p.text-align--right__09f24__1TIxB").get(1).text());
+            }
+            */
+            //this.itemsList.add(item);
         }
-        Set<Item> itemSet = new HashSet<>(this.itemsList);
-        this.getItems(itemSet);
+        //Set<Item> itemSet = new HashSet<>(this.itemsList);
+        //this.getItems(itemSet);
     }
 
     /**

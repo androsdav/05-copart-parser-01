@@ -44,11 +44,11 @@ public class RunApplication {
 
     @EventListener(ApplicationReadyEvent.class)
     public void testJpaMethods() throws IOException {
-        Map<String, String> cookies = this.parser.getCookies("https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY");
+        Map<String, String> cookies = this.parser.getCookies("https://www.yelp.com");
         for (Map.Entry<String, String> item : cookies.entrySet()) {
             System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
         }
-        Document document = this.parser.getDocument(cookies, "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY");
+        Document document = this.parser.getDocument(cookies, "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating");
         this.parser.parser(document);
     }
 
