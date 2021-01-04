@@ -1,7 +1,6 @@
 package com.adidyk;
 
 import lombok.SneakyThrows;
-import org.aspectj.apache.bcel.generic.FieldOrMethod;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,16 +18,41 @@ import java.util.*;
  * @since 10.11.2020.
  * @version 1.0.
  */
-@Component
 public class ParserYelp {
 
-    private List<Item> itemsList = new ArrayList<>();
 
-
+    private List<String> links = new ArrayList<>();
 
     /**
-     *
-     * @param url - url.
+     * @param startUrl - start url.
+     */
+    private String startUrl;
+
+    /**
+     * @param filterUrl - filer url.
+     */
+    private String filterUrl;
+
+    /**
+     * ParserYelp - constructor.
+     * @param startUrl - start url.
+     * @param filterUrl - filter url.
+     */
+    ParserYelp(String startUrl, String filterUrl) {
+        this.startUrl = startUrl;
+        this.filterUrl = filterUrl;
+    }
+
+    public void work() {
+        Map<String, String> cookies = this.getCookies(this.startUrl);
+        Document document = this.getDocument(cookies, this.filterUrl);
+        int number = this.getNumberPage(document);
+        List<String> links = this.purseAllLinkFromOnePage(document);
+
+    }
+
+    /**
+     * getCookies - gets cookies.
      * @return - map.
      */
     public Map<String, String> getCookies(String url) {
@@ -53,14 +77,14 @@ public class ParserYelp {
     }
 
     /**
-     *
-     * @param cookies - cppkies.
+     * getDocument - gets document.
+     * @param cookies - cookies.
      * @param url - url.
      * @return - document.
      */
     @SneakyThrows
-    public Document getDocument(Map<String, String> cookies, String url) throws IOException {
-        System.out.println("Second connect start");
+    public Document getDocument(Map<String, String> cookies, String url) {
+        //System.out.println("Second connect start");
         Connection.Response response = null;
         try {
             response = Jsoup.connect(url)
@@ -79,14 +103,44 @@ public class ParserYelp {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Second connect finish");
+        //System.out.println("Second connect finish");
         return response != null ? (response).parse() : null;
     }
 
     /**
+     * getNumberPage - gets number page.
+     * @param document - document.
+     */
+    public int getNumberPage(Document document) {
+        return Integer.parseInt(document.select("div.text-align--center__09f24__31irQ")
+                .first()
+                .text()
+                .substring(5)
+        );
+    }
+
+    /**
+     * purseAllLinkFromOnePage - purse all links from one page.
+     * @param document - document.
+     */
+    public List<String> purseAllLinkFromOnePage(Document document) {
+        Elements elements = document.select("div.container__09f24__21w3G");
+        for (Element element : elements) {
+            if (element.select("a.link-size--inherit__09f24__2Uj95").first().attr("href").startsWith("/biz")) {
+                this.links.add(element.select("a.link-size--inherit__09f24__2Uj95").first().absUrl("href"));
+
+            }
+        }
+        return this.links;
+    }
+
+
+    /*
+    /**
      *
      * @param document - document.
      */
+    /*
     public void parser(Document document) {
         Elements elements = document.select("div.leftRailSearchResultsContainer__09f24__3vlwA > div:nth-child(1) > ul:nth-child(1)").select("div.container__09f24__21w3G");
         for (Element element : elements) {
@@ -94,7 +148,6 @@ public class ParserYelp {
             if (element.select("p.text-align--right__09f24__1TIxB").first().text() != null) {
 
             }
-            ebaa178c88c7981d7fbc69b5794f54987f5dc2fb4ad3f932c154ab7bab687c55
             }
             //Item item = new Item();
             /*
@@ -112,11 +165,12 @@ public class ParserYelp {
         }
         //Set<Item> itemSet = new HashSet<>(this.itemsList);
         //this.getItems(itemSet);
-    }
 
+    /*
     /**
      *
      */
+    /*
     public void getItems(Set items) {
        // System.out.println(this.items);
         items.forEach(System.out::println);

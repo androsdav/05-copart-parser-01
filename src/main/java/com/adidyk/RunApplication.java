@@ -24,32 +24,71 @@ public class RunApplication {
     private ParserYelp parser;
 
     /**
-     * RunApplication - constructor.
-     *
-     * @param parser - parser.
+     * @param YELP - https://www.yelp.com.
      */
-    @Autowired
-    public RunApplication(ParserYelp parser) {
-        this.parser = parser;
+    private static final String YELP = "https://www.yelp.com";
+
+    /**
+     * @param YELP - https://www.yelp.com.
+     */
+    private static final String YELP_GET_ALL_RESTAURANTS_BROOKLYN_NY = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating&start=0";
+
+
+    /**
+     * getCookies - gets cookies.
+     * @param url - url.
+     * @return - gets cookies.
+     */
+    public Map<String, String> getCookies(String url) {
+        return  this.parser.getCookies(YELP);
+    }
+
+    /**
+     * printCookies - prints cookies.
+     * @param cookies - cookies.
+     */
+    public void printCookies(Map<String, String> cookies) {
+        for (Map.Entry<String, String> item : cookies.entrySet()) {
+            System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
+        }
+    }
+
+    /**
+     * getFindResult - gets find result.
+     * @param cookies - cookies.
+     * @param url - url.
+     * @return - returns document.
+     */
+    public Document getFindResult(Map<String, String> cookies, String url) {
+        return this.parser.getDocument(cookies, url);
     }
 
     /**
      * main - main.
-     *
      * @param arg - arg.
      */
     public static void main(String[] arg) {
         SpringApplication.run(RunApplication.class, arg);
     }
 
+    /**
+     * testJpaMethod - test JPA method.
+     */
     @EventListener(ApplicationReadyEvent.class)
-    public void testJpaMethods() throws IOException {
-        Map<String, String> cookies = this.parser.getCookies("https://www.yelp.com");
-        for (Map.Entry<String, String> item : cookies.entrySet()) {
-            System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
-        }
-        Document document = this.parser.getDocument(cookies, "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating");
-        this.parser.parser(document);
+    public void testJpaMethods() {
+
+        Map<String, String> cookies = this.getCookies(YELP);
+
+        //this.printCookies(cookies);
+
+        Document document = this.getFindResult(cookies, YELP_GET_ALL_RESTAURANTS_BROOKLYN_NY);
+
+        //System.out.println(document);
+
+        System.out.println(this.parser.getNumberPage(document));
+        this.parser.purseAllLinkFromOnePage(document);
+
+
     }
 
 }
