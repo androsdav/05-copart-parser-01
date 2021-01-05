@@ -1,11 +1,15 @@
 package com.adidyk;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.SneakyThrows;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientAutoConfiguration;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -43,11 +47,20 @@ public class ParserYelp {
         this.filterUrl = filterUrl;
     }
 
-    public void work() {
-        Map<String, String> cookies = this.getCookies(this.startUrl);
-        Document document = this.getDocument(cookies, this.filterUrl);
-        int number = this.getNumberPage(document);
-        List<String> links = this.purseAllLinkFromOnePage(document);
+    public void work() throws IOException {
+        Map<String, String> cookies = this.getCookies(this.startUrl);  // gets cookies
+        Document document = this.getDocument(cookies, this.filterUrl); // gets document
+        int number = this.getNumberPage(document);                     // gets number page
+        System.out.println("point 2");
+        List<String> links = this.getLinksFromOnePage(document);       // gets all link from one page
+
+        System.out.println(links.get(0));
+
+        this.getDocumentJavaScript(links.get(0));
+        //System.out.println(document1);
+        System.out.println("point 3");
+
+        //this.getEditLinkForItem(document1);
 
     }
 
@@ -84,7 +97,6 @@ public class ParserYelp {
      */
     @SneakyThrows
     public Document getDocument(Map<String, String> cookies, String url) {
-        //System.out.println("Second connect start");
         Connection.Response response = null;
         try {
             response = Jsoup.connect(url)
@@ -103,8 +115,26 @@ public class ParserYelp {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //System.out.println("Second connect finish");
         return response != null ? (response).parse() : null;
+    }
+
+    public void getDocumentJavaScript(String url) throws IOException {
+        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_78);
+        webClient.getOptions().setCssEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        //webClient.getOptions().(false);
+        webClient.waitForBackgroundJavaScript(60000);
+        //webClient.getOptions().setCssEnabled(false);
+        //webClient.getOptions().setJavaScriptEnabled(false);
+        HtmlPage htmlPage = webClient.getPage(url);
+        Document document = Jsoup.parse(htmlPage.asXml());
+        //System.out.println(document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").first().absUrl("href"));
+        System.out.println(document.body());
+        //System.out.println(document.select("a.lemon--a__373c0__IEZFH button__373c0__3lYgT small__373c0__Wsszq tertiary-dark__373c0__3cLwZ editCategories__373c0__3oys3").first());
+
+                //return null;
+
     }
 
     /**
@@ -123,7 +153,7 @@ public class ParserYelp {
      * purseAllLinkFromOnePage - purse all links from one page.
      * @param document - document.
      */
-    public List<String> purseAllLinkFromOnePage(Document document) {
+    public List<String> getLinksFromOnePage(Document document) {
         Elements elements = document.select("div.container__09f24__21w3G");
         for (Element element : elements) {
             if (element.select("a.link-size--inherit__09f24__2Uj95").first().attr("href").startsWith("/biz")) {
@@ -134,6 +164,17 @@ public class ParserYelp {
         return this.links;
     }
 
+    /**
+     * purseAllLinkFromSecondPage - purse link from second page.
+     * @param document - document.
+     * @return - returns string.
+     */
+    public void getEditLinkForItem(Document document) {
+        //String link = document.select("a.lemon--a__373c0__IEZFH:nth-child(6)").attr("href");
+        System.out.println();
+        System.out.println(document.body());
+        System.out.println();
+    }
 
     /*
     /**

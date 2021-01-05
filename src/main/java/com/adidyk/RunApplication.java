@@ -24,14 +24,14 @@ public class RunApplication {
     private ParserYelp parser;
 
     /**
-     * @param YELP - https://www.yelp.com.
+     * @param startUrl - https://www.yelp.com.
      */
-    private static final String YELP = "https://www.yelp.com";
+    private String startUrl = "https://www.yelp.com";
 
     /**
-     * @param YELP - https://www.yelp.com.
+     * @param filterUrl - https://www.yelp.com.
      */
-    private static final String YELP_GET_ALL_RESTAURANTS_BROOKLYN_NY = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating&start=0";
+    private String filterUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating&start=0";
 
 
     /**
@@ -39,19 +39,21 @@ public class RunApplication {
      * @param url - url.
      * @return - gets cookies.
      */
+    /*
     public Map<String, String> getCookies(String url) {
         return  this.parser.getCookies(YELP);
-    }
+    }*/
 
     /**
      * printCookies - prints cookies.
      * @param cookies - cookies.
      */
+    /*
     public void printCookies(Map<String, String> cookies) {
         for (Map.Entry<String, String> item : cookies.entrySet()) {
             System.out.println("returns :  " + item.getKey() + "    " + item.getValue());
         }
-    }
+    }*/
 
     /**
      * getFindResult - gets find result.
@@ -59,9 +61,10 @@ public class RunApplication {
      * @param url - url.
      * @return - returns document.
      */
+    /*
     public Document getFindResult(Map<String, String> cookies, String url) {
         return this.parser.getDocument(cookies, url);
-    }
+    }*/
 
     /**
      * main - main.
@@ -75,18 +78,22 @@ public class RunApplication {
      * testJpaMethod - test JPA method.
      */
     @EventListener(ApplicationReadyEvent.class)
-    public void testJpaMethods() {
+    public void testJpaMethods() throws IOException {
+        ParserYelp parserYelp = new ParserYelp(startUrl, filterUrl);
+        System.out.println("point 1");
+        parserYelp.work();
 
-        Map<String, String> cookies = this.getCookies(YELP);
+
+        //Map<String, String> cookies = this.getCookies(YELP);
 
         //this.printCookies(cookies);
 
-        Document document = this.getFindResult(cookies, YELP_GET_ALL_RESTAURANTS_BROOKLYN_NY);
+        //Document document = this.getFindResult(cookies, YELP_GET_ALL_RESTAURANTS_BROOKLYN_NY);
 
         //System.out.println(document);
 
-        System.out.println(this.parser.getNumberPage(document));
-        this.parser.purseAllLinkFromOnePage(document);
+        //System.out.println(this.parser.getNumberPage(document));
+        //this.parser.purseAllLinkFromFirstPage(document);
 
 
     }
