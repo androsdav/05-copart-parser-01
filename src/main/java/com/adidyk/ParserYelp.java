@@ -1,8 +1,8 @@
 package com.adidyk;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.javascript.SilentJavaScriptErrorListener;
 import lombok.SneakyThrows;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.web.reactive.function.client.WebCl
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 
@@ -47,7 +48,7 @@ public class ParserYelp {
         this.filterUrl = filterUrl;
     }
 
-    public void work() throws IOException {
+    public void work() throws IOException, InterruptedException {
         Map<String, String> cookies = this.getCookies(this.startUrl);  // gets cookies
         Document document = this.getDocument(cookies, this.filterUrl); // gets document
         int number = this.getNumberPage(document);                     // gets number page
@@ -118,7 +119,36 @@ public class ParserYelp {
         return response != null ? (response).parse() : null;
     }
 
-    public void getDocumentJavaScript(String url) throws IOException {
+    public void getDocumentJavaScript(String url) throws IOException, InterruptedException {
+
+        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_78);
+        webClient.setCssErrorHandler(new SilentCssErrorHandler());
+        webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener());
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.waitForBackgroundJavaScriptStartingBefore(1_000);
+        HtmlPage page = webClient.getPage(url);
+        webClient.waitForBackgroundJavaScript(10_000);
+        Document document = Jsoup.parse(page.asXml());
+        System.out.println(document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").first());
+
+        /*
+
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setJavaScriptEnabled(false);
+        //webClient.getOptions().setThrowExceptionOnScriptError(false);
+        //webClient.setCssErrorHandler(new SilentCssErrorHandler());
+        //webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener());
+        HtmlPage htmlPage = webClient.getPage(url);
+        Document document = Jsoup.parse(htmlPage.asXml());
+        System.out.println(document.body());
+        */
+
+
+
+//        webClient.getAjaxController().processSynchron(page, request, false);
+
+
+        /*
         WebClient webClient = new WebClient(BrowserVersion.FIREFOX_78);
         webClient.getOptions().setCssEnabled(true);
         webClient.getOptions().setJavaScriptEnabled(true);
@@ -134,6 +164,12 @@ public class ParserYelp {
         //System.out.println(document.select("a.lemon--a__373c0__IEZFH button__373c0__3lYgT small__373c0__Wsszq tertiary-dark__373c0__3cLwZ editCategories__373c0__3oys3").first());
 
                 //return null;
+
+        // https://riptutorial.com/ru/jsoup/example/16274/%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7-javascript-%D1%81%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B9-%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D1%8B-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-jsoup-%D0%B8-htmunit
+        // https://www.codeflow.site/ru/article/htmlunit
+        // https://stackoverrun.com/ru/q/3019500
+        // https://stackoverflow.com/questions/5555178/htmlunit-doesnt-wait-for-javascript
+        */
 
     }
 

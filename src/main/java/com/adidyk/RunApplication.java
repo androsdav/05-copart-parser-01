@@ -78,7 +78,7 @@ public class RunApplication {
      * testJpaMethod - test JPA method.
      */
     @EventListener(ApplicationReadyEvent.class)
-    public void testJpaMethods() throws IOException {
+    public void testJpaMethods() throws IOException, InterruptedException {
         ParserYelp parserYelp = new ParserYelp(startUrl, filterUrl);
         System.out.println("point 1");
         parserYelp.work();
