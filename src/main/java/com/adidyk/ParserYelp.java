@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-
+import java.util.logging.Level;
 
 /**
  * Class RunApplication used to start run application.
@@ -120,16 +120,25 @@ public class ParserYelp {
     }
 
     public void getDocumentJavaScript(String url) throws IOException, InterruptedException {
-
+        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
         WebClient webClient = new WebClient(BrowserVersion.FIREFOX_78);
+
+
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setPrintContentOnFailingStatusCode(false);
+
+
         webClient.setCssErrorHandler(new SilentCssErrorHandler());
         webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener());
+
         webClient.getOptions().setThrowExceptionOnScriptError(false);
+
         webClient.waitForBackgroundJavaScriptStartingBefore(1_000);
         HtmlPage page = webClient.getPage(url);
         webClient.waitForBackgroundJavaScript(10_000);
         Document document = Jsoup.parse(page.asXml());
-        System.out.println(document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").first());
+        System.out.println(document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").first().attr("href"));
 
         /*
 
