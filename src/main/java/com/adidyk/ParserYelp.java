@@ -9,13 +9,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientAutoConfiguration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
+
+import org.springframework.web.reactive.function.client.WebClient;
+
 
 /**
  * Class RunApplication used to start run application.
@@ -119,6 +123,18 @@ public class ParserYelp {
         return response != null ? (response).parse() : null;
     }
 
+    public void getDocumentWebflux(String url) {
+
+        WebClient webClient2 = WebClient.builder()
+                .baseUrl(url)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        HtmlPage htmlPage = webClient2.get().;
+
+
+    }
+
     public void getDocumentJavaScript(String url) throws IOException, InterruptedException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
         WebClient webClient = new WebClient(BrowserVersion.FIREFOX_78);
@@ -135,7 +151,9 @@ public class ParserYelp {
         webClient.getOptions().setThrowExceptionOnScriptError(false);
 
         webClient.waitForBackgroundJavaScriptStartingBefore(1_000);
+
         HtmlPage page = webClient.getPage(url);
+
         webClient.waitForBackgroundJavaScript(10_000);
         Document document = Jsoup.parse(page.asXml());
         System.out.println(document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").first().attr("href"));
