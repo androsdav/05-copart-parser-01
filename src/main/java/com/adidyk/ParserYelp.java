@@ -4,6 +4,7 @@ import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.javascript.SilentJavaScriptErrorListener;
 import lombok.SneakyThrows;
+import org.apache.juli.logging.LogFactory;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,8 +18,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
-
-import org.springframework.web.reactive.function.client.WebClient;
 
 
 /**
@@ -123,43 +122,44 @@ public class ParserYelp {
         return response != null ? (response).parse() : null;
     }
 
-    public void getDocumentWebflux(String url) {
-
-        WebClient webClient2 = WebClient.builder()
-                .baseUrl(url)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-
-        HtmlPage htmlPage = webClient2.get().;
-
-
-    }
-
     public void getDocumentJavaScript(String url) throws IOException, InterruptedException {
-        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
-        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_78);
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setJavaScriptEnabled(true); // not load java script
+        webClient.getOptions().setCssEnabled(false); // clear css value warning in logs
+        webClient.getOptions().setUseInsecureSSL(true); // &&
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false); // &&
+        webClient.getCookieManager().setCookiesEnabled(true); // set cookies
+        webClient.getOptions().setThrowExceptionOnScriptError(false); // not load script error
+        webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener()); // good clear error
+        webClient.setCssErrorHandler(new SilentCssErrorHandler()); // dsd
 
 
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
 
-        webClient.setCssErrorHandler(new SilentCssErrorHandler());
-        webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener());
+//        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
 
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
 
-        webClient.waitForBackgroundJavaScriptStartingBefore(1_000);
+
+
+        //webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        //webClient.getOptions().setThrowExceptionOnScriptError(false);
+
+
+
+        //webClient.setCssErrorHandler(new SilentCssErrorHandler());
+
+
+        //webClient.getOptions().setThrowExceptionOnScriptError(false);
+
+        //webClient.waitForBackgroundJavaScriptStartingBefore(1000);
 
         HtmlPage page = webClient.getPage(url);
 
-        webClient.waitForBackgroundJavaScript(10_000);
+        webClient.waitForBackgroundJavaScript(6000);
         Document document = Jsoup.parse(page.asXml());
         System.out.println(document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").first().attr("href"));
-
+        webClient.close();
         /*
-
         webClient.getOptions().setCssEnabled(false);
         webClient.getOptions().setJavaScriptEnabled(false);
         //webClient.getOptions().setThrowExceptionOnScriptError(false);
