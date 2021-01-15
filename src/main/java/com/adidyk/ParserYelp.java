@@ -136,7 +136,7 @@ public class ParserYelp {
 
 
 
-//        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+//        webClient.setAjaxController(new NicelyResynchronizingAjaxController()); das'dklas'd
 
 
 
