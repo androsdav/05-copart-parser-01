@@ -1,13 +1,16 @@
 package com.adidyk;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import java.io.IOException;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class RunApplication used to start run application.
@@ -67,6 +70,16 @@ public class RunApplication {
     }*/
 
     /**
+     *
+     */
+    private WebClientHelper webClientHelper;
+
+    @Autowired
+    RunApplication(WebClientHelper webClientHelper) {
+        this.webClientHelper = webClientHelper;
+    }
+
+    /**
      * main - main.
      * @param arg - arg.
      */
@@ -79,9 +92,35 @@ public class RunApplication {
      */
     @EventListener(ApplicationReadyEvent.class)
     public void testJpaMethods() throws IOException, InterruptedException {
-        ParserYelp parserYelp = new ParserYelp(startUrl, filterUrl);
-        System.out.println("point 1");
-        parserYelp.work();
+        String startUrl = "https://www.yelp.com";
+        String filterUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating&start=0";
+        Document document = this.webClientHelper.getDocument(filterUrl);
+
+        // total number page
+        System.out.println(Integer.parseInt(document.select("div.text-align--center__09f24__31irQ")
+                .first()
+                .text()
+                .substring(5)));
+
+        // gets all links by criteria
+        List<String> links = new ArrayList<>();
+        Elements elements = document.select("div.container__09f24__21w3G");
+        for (Element element : elements) {
+            if (element.select("a.link-size--inherit__09f24__2Uj95").first().attr("href").startsWith("/biz")) {
+                links.add(element.select("a.link-size--inherit__09f24__2Uj95").first().attr("href"));
+            }
+        }
+        for (String link : links) {
+            System.out.println(startUrl + link);
+        }
+
+        // get link one item
+        Document document1 = this.webClientHelper.getDocument(startUrl + links.get(0));
+        System.out.println(startUrl + document1.select("a.button__373c0__3lYgT.small__373c0__Wsszq").first().attr("href"));
+
+        //ParserYelp parserYelp = new ParserYelp(startUrl, filterUrl);
+        //System.out.println("point 1");
+        //parserYelp.work();
 
 
         //Map<String, String> cookies = this.getCookies(YELP);
