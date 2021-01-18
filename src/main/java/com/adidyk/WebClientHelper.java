@@ -6,7 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
@@ -15,13 +15,13 @@ import java.io.IOException;
  * @since 16.01.2021.
  * @version 1.0.
  */
-@Service
+@Component
 public class WebClientHelper implements IWebClientHelper {
 
     /**
      * @param webClientConfig - web client config.
      */
-    private IWebClientConfig webClientConfig;
+    private WebClient webClient;
 
     /**
      * WebClientConfig - constructor.
@@ -29,7 +29,7 @@ public class WebClientHelper implements IWebClientHelper {
      */
     @Autowired
     WebClientHelper(@Qualifier("webClientConfig") WebClientConfig webClientConfig) {
-        this.webClientConfig = webClientConfig;
+        this.webClient = webClientConfig.getWebClient();
     }
 
     /**
@@ -39,12 +39,26 @@ public class WebClientHelper implements IWebClientHelper {
      */
     @Override
     public Document getDocument(String url) {
-        WebClient webClient = this.webClientConfig.getWebClient();
         Document document = null;
         HtmlPage htmlPage;
         try {
-            htmlPage = webClient.getPage(url);
-            webClient.waitForBackgroundJavaScript(10000);
+            htmlPage = this.webClient.getPage(url);
+            webClient.waitForBackgroundJavaScript(1000);
+            document = Jsoup.parse(htmlPage.asXml());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        webClient.close();
+        return document;
+    }
+
+    @Override
+    public Document getDocument1(String url) {
+        Document document = null;
+        HtmlPage htmlPage;
+        try {
+            htmlPage = this.webClient.getPage(url);
+            webClient.waitForBackgroundJavaScript(4000);
             document = Jsoup.parse(htmlPage.asXml());
         } catch (IOException e) {
             e.printStackTrace();

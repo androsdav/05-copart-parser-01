@@ -17,4 +17,6 @@ public interface IWebClientHelper {
      */
     Document getDocument(String url);
 
+    Document getDocument1(String url);
+
 }

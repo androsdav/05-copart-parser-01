@@ -74,9 +74,12 @@ public class RunApplication {
      */
     private WebClientHelper webClientHelper;
 
+    private WebClientService webClientService;
+
     @Autowired
-    RunApplication(WebClientHelper webClientHelper) {
+    RunApplication(WebClientHelper webClientHelper, WebClientService webClientService) {
         this.webClientHelper = webClientHelper;
+        this.webClientService = webClientService;
     }
 
     /**
@@ -92,6 +95,15 @@ public class RunApplication {
      */
     @EventListener(ApplicationReadyEvent.class)
     public void testJpaMethods() throws IOException, InterruptedException {
+        // String filterUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY"; after
+        // String filterUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating&start=0"; before
+        String url = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C NY";
+        //this.webClientService.scraper(url);
+        this.webClientService.test();
+
+
+    /*
+
         String startUrl = "https://www.yelp.com";
         String filterUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating&start=0";
         Document document = this.webClientHelper.getDocument(filterUrl);
@@ -117,6 +129,10 @@ public class RunApplication {
         // get link one item
         Document document1 = this.webClientHelper.getDocument(startUrl + links.get(0));
         System.out.println(startUrl + document1.select("a.button__373c0__3lYgT.small__373c0__Wsszq").first().attr("href"));
+
+
+        */
+
 
         //ParserYelp parserYelp = new ParserYelp(startUrl, filterUrl);
         //System.out.println("point 1");
