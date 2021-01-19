@@ -103,6 +103,7 @@ public class RunApplication {
 
 
     /*
+    me bad day today
 
         String startUrl = "https://www.yelp.com";
         String filterUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating&start=0";
