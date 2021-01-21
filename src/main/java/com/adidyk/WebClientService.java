@@ -6,6 +6,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,6 +28,8 @@ public class WebClientService {
     private String start = "&start=";
 
     private String yelp = "https://www.yelp.com";
+
+    private String copart = "https://rozetka.com.ua";
 
     private List<String> links = new ArrayList<>();
 
@@ -56,9 +59,9 @@ public class WebClientService {
      * @param url - url.
      */
     void scraper(String url) {
-        int counter = this.counter(this.webClientHelper.getDocument(url));
-        for (int count = 0; count < counter * 10; count = count + 10) {
-            Document document = this.webClientHelper.getDocument(url + this.sortBy + "rating" + this.start + count);
+        int counter = this.counter(this.webClientHelper.getDocument(url, 1000));
+        for (int count = 0; count < 10; count = count + 10) {
+            Document document = this.webClientHelper.getDocument(url + this.sortBy + "rating" + this.start + count, 1000);
             Elements elements = document.select("div.container__09f24__21w3G");
             for (Element element : elements) {
                 if (element.select("a.link-size--inherit__09f24__2Uj95").first().attr("href").startsWith("/biz")) {
@@ -68,16 +71,42 @@ public class WebClientService {
         }
         for (String link : links) {
             System.out.println(link);
-
         }
-        test();
+        scraper1();
     }
 
-    void test() {
-        String url = this.yelp + "/biz/otis-brooklyn-2?osq=Restaurants";
-        Document document = this.webClientHelper.getDocument1(url);
-        System.out.println(document.select("div.page-header").first());
+    void scraper1() {
+        for (String link : this.links) {
+            Document document = this.webClientHelper.getDocument(link, 1800);
+            String linkEdit = document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").attr("href");
+            System.out.println(linkEdit);
 
+        }
+
+
+            /*
+        String url = this.yelp + "/biz/otis-brooklyn-2?osq=Restaurants";
+        Document document = this.webClientHelper.getDocument(url, 1800);
+        String link = document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").attr("href");
+        System.out.println(this.yelp + link);
+        System.out.println("link: " + link);*/
+
+
+    }
+
+    void scraper2() {
+        HashMap<String, String> map = new HashMap<>();
+        Document document = this.webClientHelper.getDocument(copart, 5000);
+        //System.out.println(document.select("div.menu-wrapper_state_static"));
+        Elements categories = document.select("div.menu-wrapper_state_static");
+        System.out.println(categories);
+        // first level
+        /*
+        Elements categories = document.select("div.menu-wrapper_state_static").select("li.menu-categories__item");
+        for (Element category : categories) {
+            String name = category.text();
+            System.out.println("name: " + name);
+        }*/
 
     }
 

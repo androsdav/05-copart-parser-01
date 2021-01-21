@@ -97,9 +97,12 @@ public class RunApplication {
     public void testJpaMethods() throws IOException, InterruptedException {
         // String filterUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY"; after
         // String filterUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C%20NY&sortby=rating&start=0"; before
-        String url = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C NY";
-        //this.webClientService.scraper(url);
-        this.webClientService.test();
+        //String url = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C NY";
+
+        String url = "https://www.copart.com";
+
+        this.webClientService.scraper2();
+        //this.webClientService.test();
 
 
     /*

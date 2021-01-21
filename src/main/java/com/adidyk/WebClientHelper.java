@@ -38,27 +38,12 @@ public class WebClientHelper implements IWebClientHelper {
      * @return - get document.
      */
     @Override
-    public Document getDocument(String url) {
+    public Document getDocument(String url, int delay) {
         Document document = null;
         HtmlPage htmlPage;
         try {
             htmlPage = this.webClient.getPage(url);
-            webClient.waitForBackgroundJavaScript(1000);
-            document = Jsoup.parse(htmlPage.asXml());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        webClient.close();
-        return document;
-    }
-
-    @Override
-    public Document getDocument1(String url) {
-        Document document = null;
-        HtmlPage htmlPage;
-        try {
-            htmlPage = this.webClient.getPage(url);
-            webClient.waitForBackgroundJavaScript(4000);
+            webClient.waitForBackgroundJavaScript(delay);
             document = Jsoup.parse(htmlPage.asXml());
         } catch (IOException e) {
             e.printStackTrace();

@@ -15,8 +15,6 @@ public interface IWebClientHelper {
      * @param url - url.
      * @return - get document.
      */
-    Document getDocument(String url);
-
-    Document getDocument1(String url);
+    Document getDocument(String url, int delay);
 
 }
