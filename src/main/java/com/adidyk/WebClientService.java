@@ -85,7 +85,7 @@ public class WebClientService {
 
 
             /*
-        String url = this.yelp + "/biz/otis-brooklyn-2?osq=Restaurants";
+        String url = this.yelp + "/biz/otis-brooklyn-2?osq=Restaurants"; ssss
         Document document = this.webClientHelper.getDocument(url, 1800);
         String link = document.select("a.button__373c0__3lYgT.small__373c0__Wsszq").attr("href");
         System.out.println(this.yelp + link);
