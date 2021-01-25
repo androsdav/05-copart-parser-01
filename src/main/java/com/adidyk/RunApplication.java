@@ -100,8 +100,10 @@ public class RunApplication {
         //String url = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Brooklyn%2C NY";
 
         String url = "https://www.copart.com";
+        SeleniumDriver seleniumDriver = new SeleniumDriver();
+        seleniumDriver.test();
 
-        this.webClientService.scraper2();
+        //this.webClientService.scraper2();
         //this.webClientService.test();
 
 
