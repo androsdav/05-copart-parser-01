@@ -38,19 +38,8 @@ public class SeleniumDriver {
         }
         */
 
-        //System.out.println("row: " + rows.get(0).getText());
-
-        //System.out.println("!!!!! TABLE !!!! : " + table.getText());
-        //System.out.println("Thread sleep 5 sec");
         Thread.sleep(15000);
         driver.quit();
 
-        //WebElement table = new WebDriverWait(driver, 40).until(ExpectedConditions.elementToBeClickable(By.id("serverSideDataTable")));
-        //WebElement table = driver.findElement(By.id("serverSideDataTable"));
-        //System.out.println(table);
-        //System.out.println("Thread sleep 2 sec");
-        //Thread.sleep(2000);
-        //String pageSource = driver.getPageSource();
-        //Document document = Jsoup.parse(pageSource);
     }
 }
